@@ -1,0 +1,9 @@
+displayName = Chat Source
+author = direwolf420
+version = 1.0
+hideCode = false
+hideResources = false
+includeSource = false
+buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*
+includePDB = true
+side = Client
