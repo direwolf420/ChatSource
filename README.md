@@ -13,12 +13,18 @@ Shows the source of messages in the chat. Clientside, toggleable via config
 Example:
 
 **Before:**
-"Your world has been blessed with Cobalt!"
+
+```
+Your world has been blessed with Cobalt!"
 Player got 10 tier 1 Reversivity coins and now has 70 in total."
+```
 
 **After:**
+
+```
 "Your world has been blessed with Cobalt!"
 "[AlchemistNPC] Player got 10 tier 1 Reversivity coins and now has 70 in total."
+```
 
 
 "[Terraria]" prefix for vanilla messages is by default disabled
