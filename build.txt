@@ -1,6 +1,7 @@
 displayName = Chat Source
 author = direwolf420
-version = 1.0
+version = 1.0.1
+homepage = https://forums.terraria.org/index.php?threads/chat-source-shows-the-source-of-messages-in-the-chat.86574/
 hideCode = false
 hideResources = false
 includeSource = false
