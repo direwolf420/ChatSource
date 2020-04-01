@@ -6,7 +6,7 @@ namespace ChatSource
     {
         #region Custom stuff
 
-        private const string COMMANDNAME = "modName";
+        private const string COMMANDNAME = "CSmodname";
         private const string ARGUMENT = "internalName";
 
         public static string CommandStart
