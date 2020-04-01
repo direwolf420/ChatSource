@@ -56,6 +56,9 @@ namespace ChatSource
             if (parse.Length <= 0)
                 return;
 
+            if (parse[0].Text.StartsWith(name))
+                return;
+
             parse[0].Text = name + parse[0].Text;
         }
 
@@ -65,23 +68,35 @@ namespace ChatSource
             if (!Config.Instance.ChatSourceEnabled)
                 return string.Empty;
 
+            StackFrame[] frames/* = new StackFrame[1]*/;
             try
             {
-                var frames = new StackTrace(true).GetFrames();
+                frames = new StackTrace(true).GetFrames();
                 Logging.PrettifyStackTraceSources(frames);
                 int index = 2;
-                while (frames[index].GetMethod().Name.Contains("NewText"))
+                while (index < frames.Length && frames[index].GetMethod().Name.Contains("NewText"))
                     index++;
-                var frame = frames[index];
-                var method = frame.GetMethod();
-                name = method.DeclaringType.Namespace;
-                name = name.Split('.')[0];
-                if (!Config.Instance.DisplayTerrariaSource && name == "Terraria")
+                if (index == frames.Length)
                     name = string.Empty;
+                else
+                {
+                    var frame = frames[index];
+                    var method = frame.GetMethod();
+                    name = method.DeclaringType.Namespace;
+                    name = name.Split('.')[0];
+                    if (!Config.Instance.DisplayTerrariaSource && name == "Terraria")
+                        name = string.Empty;
+                }
             }
             catch
             {
-
+                //var logger = ModContent.GetInstance<ChatSource>().Logger;
+                //logger.Info("#####");
+                //foreach (var frame in frames)
+                //{
+                //    logger.Info(frame?.ToString() ?? "frame null");
+                //}
+                //logger.Info("#####");
             }
             if (string.IsNullOrEmpty(name))
                 return string.Empty;
