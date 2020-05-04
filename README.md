@@ -10,11 +10,13 @@ For those who need to know which mod writes stuff to the chat!
 
 ![Situation](https://raw.githubusercontent.com/direwolf420/ChatSource/master/situation.png)
 
-Shows the source of messages in the chat. Clientside, toggleable via config
+Shows the source of messages in the chat. Clientside, toggleable via config.
 
-#### Example:
+#### Examples:
 
 **Before:**
+
+![Fixed](https://raw.githubusercontent.com/direwolf420/ChatSource/master/fixed.png)
 
 ```
 Your world has been blessed with Cobalt!"
@@ -27,7 +29,6 @@ Player got 10 tier 1 Reversivity coins and now has 70 in total."
 "Your world has been blessed with Cobalt!"
 "[AlchemistNPC] Player got 10 tier 1 Reversivity coins and now has 70 in total."
 ```
-
 
 Notes
 * Some stuff like ore spawn announcements in multiplayer will show no mod associated because those messages are serversided
