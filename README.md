@@ -33,4 +33,4 @@ Player got 10 tier 1 Reversivity coins and now has 70 in total."
 Notes
 * Some stuff like ore spawn announcements in multiplayer will show no mod associated because those messages are serversided
 * "[Terraria]" prefix for vanilla messages is by default disabled
-* To view the display name of a mod you don't know, type in chat for example "/CSmodname RecipeBrowser"
+* Toggle "Display Name" and "Internal Name" of a mod via config

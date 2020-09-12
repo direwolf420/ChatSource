@@ -16,8 +16,13 @@ namespace ChatSource
 		public bool ChatSourceEnabled;
 
 		[Tooltip("If messages from the vanilla game should be marked as such")]
-		[Label("Display Vanilla As Source")]
+		[Label("Show Vanilla As Source")]
 		[DefaultValue(false)]
 		public bool DisplayTerrariaSource;
+
+		[Tooltip("If mods should show with their 'Display Name' or 'Internal Name'")]
+		[Label("Show 'Display Name'")]
+		[DefaultValue(false)]
+		public bool ShowDisplayName;
 	}
 }
