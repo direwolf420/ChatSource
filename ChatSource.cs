@@ -5,15 +5,18 @@ using Terraria.ModLoader;
 using Terraria.UI.Chat;
 using System.Reflection;
 using System;
+using Terraria.GameContent.UI.Chat;
+using Terraria.DataStructures;
+using Microsoft.Xna.Framework;
 
 namespace ChatSource
 {
     //public class MPlayer : ModPlayer
     //{
-    //    public override bool Shoot(Item item, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+    //    public override bool Shoot(Item item, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     //    {
-    //        Main.NewText("s", Color.White);
-    //        return base.Shoot(item, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+    //        Main.NewText("test", 255, 255, 200);
+    //        return base.Shoot(item, source, position, velocity, type, damage, knockback);
     //    }
     //}
 
@@ -21,8 +24,7 @@ namespace ChatSource
     {
         public override void Load()
         {
-            On.Terraria.Main.NewText_string_byte_byte_byte_bool += Main_NewText_string_byte_byte_byte_bool;
-            On.Terraria.Main.NewText_List1 += Main_NewText_List1;
+            On.Terraria.GameContent.UI.Chat.RemadeChatMonitor.AddNewMessage += RemadeChatMonitor_AddNewMessage;
 
             if (activelyModdingField == null)
             {
@@ -40,26 +42,16 @@ namespace ChatSource
             }
         }
 
+        private void RemadeChatMonitor_AddNewMessage(On.Terraria.GameContent.UI.Chat.RemadeChatMonitor.orig_AddNewMessage orig, Terraria.GameContent.UI.Chat.RemadeChatMonitor self, string text, Microsoft.Xna.Framework.Color color, int widthLimitInPixels)
+        {
+            orig(self, text, color, widthLimitInPixels);
+
+            ModifyLastChatMessage();
+        }
+
         public override void Unload()
         {
             activelyModdingField = null;
-        }
-
-        private static void Main_NewText_List1(On.Terraria.Main.orig_NewText_List1 orig, List<TextSnippet> snippets)
-        {
-            orig(snippets);
-
-            if (snippets.Count <= 0)
-                return;
-
-            ModifyLastChatMessage();
-        }
-
-        private static void Main_NewText_string_byte_byte_byte_bool(On.Terraria.Main.orig_NewText_string_byte_byte_byte_bool orig, string newText, byte R, byte G, byte B, bool force)
-        {
-            orig(newText, R, G, B, force);
-
-            ModifyLastChatMessage();
         }
 
         private static void ModifyLastChatMessage()
@@ -105,14 +97,33 @@ namespace ChatSource
             if (name == string.Empty)
                 return;
 
-            var parse = Main.chatLine[0].parsedText;
-            if (parse.Length <= 0)
-                return;
+            if (Main.chatMonitor is RemadeChatMonitor chat)
+            {
+                //All classes public
+                //RemadeChatMonitor has private List<ChatMessageContainer> _messages;
+                //ChatMessageContainer has private List<TextSnippet[]> _parsedText;
+                //TextSnippet has public string Text;
+                FieldInfo messagesField = typeof(RemadeChatMonitor).GetField("_messages", BindingFlags.Instance | BindingFlags.NonPublic);
+                List<ChatMessageContainer> messages = messagesField.GetValue(chat) as List<ChatMessageContainer>;
 
-            if (parse[0].Text.StartsWith(name))
-                return;
+                FieldInfo parsedTextField = typeof(ChatMessageContainer).GetField("_parsedText", BindingFlags.Instance | BindingFlags.NonPublic);
 
-            parse[0].Text = name + parse[0].Text;
+                var lastMessage = messages[0];
+
+                List<TextSnippet[]> parsedText = parsedTextField.GetValue(lastMessage) as List<TextSnippet[]>;
+
+                if (parsedText.Count <= 0)
+                    return;
+
+                var snippet = parsedText[0];
+
+                var firstWord = snippet[0];
+
+                if (firstWord.Text.StartsWith(name))
+                    return;
+
+                firstWord.Text = name + firstWord.Text;
+            }
         }
 
         public static FieldInfo activelyModdingField;
@@ -129,8 +140,10 @@ namespace ChatSource
                 frames = new StackTrace(true).GetFrames();
                 Logging.PrettifyStackTraceSources(frames);
                 int index = 2;
-                while (index < frames.Length && frames[index].GetMethod().Name.Contains("NewText"))
+                while (index < frames.Length && frames[index].GetMethod().Name is string methodName &&
+                    (methodName.Contains("NewText") || methodName.Contains("AddNewMessage"))) //We want the call to NewText, use AddNewMessage as fallback
                     index++;
+
                 if (index == frames.Length)
                     name = string.Empty;
                 else
@@ -143,14 +156,16 @@ namespace ChatSource
                     {
                         if (Config.Instance.ShowDisplayName)
                         {
-                            Mod mod = ModLoader.GetMod(name);
-                            if (mod == null)
-                            {
-                                mod = ModLoader.GetMod(name + "Mod");
-                            }
-                            if (mod != null)
+                            if (ModLoader.TryGetMod(name, out Mod mod))
                             {
                                 name = mod.DisplayName;
+                            }
+                            else
+                            {
+                                if (ModLoader.TryGetMod(name + "Mod", out Mod mod2))
+                                {
+                                    name = mod2.DisplayName;
+                                }
                             }
                         }
                     }
