@@ -117,12 +117,19 @@ namespace ChatSource
 
                 var snippet = parsedText[0];
 
+                //OriginalText because vanilla recalculates parsedText on window resize based on OriginalText
+                var textOriginal = lastMessage.OriginalText;
+
+                if (textOriginal.StartsWith(name))
+                    return;
+
                 var firstWord = snippet[0];
 
                 if (firstWord.Text.StartsWith(name))
                     return;
 
                 firstWord.Text = name + firstWord.Text;
+                lastMessage.OriginalText = name + lastMessage.OriginalText;
             }
         }
 
