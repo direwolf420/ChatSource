@@ -5,7 +5,7 @@ Example:
 
 Before:
 "Your world has been blessed with Cobalt!"
-Player got 10 tier 1 Reversivity coins and now has 70 in total."
+"Player got 10 tier 1 Reversivity coins and now has 70 in total."
 
 After:
 "Your world has been blessed with Cobalt!"
@@ -16,3 +16,7 @@ Notes:
 - Some stuff like ore spawn announcements in multiplayer will show no mod associated because those messages are serversided
 - "[Terraria]" prefix for vanilla messages is by default disabled
 - Toggle "Display Name" and "Internal Name" of a mod via config
+
+Localization: If you want to add support for different languages, you are welcome to contribute localizations here: https://github.com/direwolf420/ChatSource
+List of localization contributors:
+* None!

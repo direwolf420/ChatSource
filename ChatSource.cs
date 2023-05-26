@@ -1,64 +1,54 @@
+using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using Terraria;
+using Terraria.GameContent.UI.Chat;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
-using System.Reflection;
-using System;
-using Terraria.GameContent.UI.Chat;
-using Terraria.DataStructures;
-using Microsoft.Xna.Framework;
 
 namespace ChatSource
 {
-    //public class MPlayer : ModPlayer
-    //{
-    //    public override bool Shoot(Item item, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-    //    {
-    //        Main.NewText("test", 255, 255, 200);
-    //        return base.Shoot(item, source, position, velocity, type, damage, knockback);
-    //    }
-    //}
+	public class ChatSource : Mod
+	{
+		public override void Load()
+		{
+			On_RemadeChatMonitor.AddNewMessage += RemadeChatMonitor_AddNewMessage;
 
-    public class ChatSource : Mod
-    {
-        public override void Load()
-        {
-            On.Terraria.GameContent.UI.Chat.RemadeChatMonitor.AddNewMessage += RemadeChatMonitor_AddNewMessage;
+			if (activelyModdingField == null)
+			{
+				try
+				{
+					//Terraria.ModLoader.Core: internal class ModCompile: public static bool activelyModding;
+					Assembly ModLoaderAssembly = typeof(ModLoader).Assembly;
+					Type ModCompileType = ModLoaderAssembly.GetType("Terraria.ModLoader.Core.ModCompile");
+					activelyModdingField = ModCompileType.GetField("activelyModding", BindingFlags.Public | BindingFlags.Static);
+				}
+				catch
+				{
 
-            if (activelyModdingField == null)
-            {
-                try
-                {
-                    //Terraria.ModLoader.Core: internal class ModCompile: public static bool activelyModding;
-                    Assembly ModLoaderAssembly = typeof(ModLoader).Assembly;
-                    Type ModCompileType = ModLoaderAssembly.GetType("Terraria.ModLoader.Core.ModCompile");
-                    activelyModdingField = ModCompileType.GetField("activelyModding", BindingFlags.Public | BindingFlags.Static);
-                }
-                catch
-                {
+				}
+			}
+		}
 
-                }
-            }
-        }
+		private static void RemadeChatMonitor_AddNewMessage(On_RemadeChatMonitor.orig_AddNewMessage orig, RemadeChatMonitor self, string text, Color color, int widthLimitInPixels)
+		{
+			orig(self, text, color, widthLimitInPixels);
 
-        private void RemadeChatMonitor_AddNewMessage(On.Terraria.GameContent.UI.Chat.RemadeChatMonitor.orig_AddNewMessage orig, Terraria.GameContent.UI.Chat.RemadeChatMonitor self, string text, Microsoft.Xna.Framework.Color color, int widthLimitInPixels)
-        {
-            orig(self, text, color, widthLimitInPixels);
+			ModifyLastChatMessage();
+		}
 
-            ModifyLastChatMessage();
-        }
+		public override void Unload()
+		{
+			activelyModdingField = null;
+		}
 
-        public override void Unload()
-        {
-            activelyModdingField = null;
-        }
+		private static void ModifyLastChatMessage()
+		{
+			if (Main.gameMenu) return;
 
-        private static void ModifyLastChatMessage()
-        {
-            if (Main.gameMenu) return;
-
-            /* this is all because of tmls ExceptionHandler doing stuff and printing it to chat when in debug/modder mode, causing some error with the stacktrace
+			/* this is all because of tmls ExceptionHandler doing stuff and printing it to chat when in debug/modder mode, causing some error with the stacktrace
             [19:03:00] [1/WARN] [tML]: Silently Caught Exception: 
             System.BadImageFormatException: OutOfBoundsRead
                at System.Reflection.Throw.OutOfBounds()
@@ -77,135 +67,149 @@ namespace ChatSource
                at AlchemistNPC.AlchemistNPCPlayer.OnEnterWorld(Player player) in AlchemistNPCPlayer.cs:line 499
             */
 
-            //I wish I didn't have to do this. Should have no implications for non-modders
-            bool setToFalse = false;
+			//I wish I didn't have to do this. Should have no implications for non-modders
+			bool setToFalse = false;
 
-            if ((bool?)activelyModdingField?.GetValue(null) == true)
-            {
-                activelyModdingField.SetValue(null, false);
-                setToFalse = true;
-            }
-            //End of shenanigans
+			if ((bool?)activelyModdingField?.GetValue(null) == true)
+			{
+				activelyModdingField.SetValue(null, false);
+				setToFalse = true;
+			}
+			//End of shenanigans
 
-            string name = GetCallingName(true);
+			string name = GetCallingName(true);
 
-            if (setToFalse)
-            {
-                activelyModdingField.SetValue(null, true);
-            }
+			if (setToFalse)
+			{
+				activelyModdingField.SetValue(null, true);
+			}
 
-            if (name == string.Empty)
-                return;
+			if (name == string.Empty)
+				return;
 
-            if (Main.chatMonitor is RemadeChatMonitor chat)
-            {
-                //All classes public
-                //RemadeChatMonitor has private List<ChatMessageContainer> _messages;
-                //ChatMessageContainer has private List<TextSnippet[]> _parsedText;
-                //TextSnippet has public string Text;
-                FieldInfo messagesField = typeof(RemadeChatMonitor).GetField("_messages", BindingFlags.Instance | BindingFlags.NonPublic);
-                List<ChatMessageContainer> messages = messagesField.GetValue(chat) as List<ChatMessageContainer>;
+			if (Main.chatMonitor is RemadeChatMonitor chat)
+			{
+				//All classes public
+				//RemadeChatMonitor has private List<ChatMessageContainer> _messages;
+				//ChatMessageContainer has private List<TextSnippet[]> _parsedText;
+				//TextSnippet has public string Text;
+				FieldInfo messagesField = typeof(RemadeChatMonitor).GetField("_messages", BindingFlags.Instance | BindingFlags.NonPublic);
+				List<ChatMessageContainer> messages = messagesField.GetValue(chat) as List<ChatMessageContainer>;
 
-                FieldInfo parsedTextField = typeof(ChatMessageContainer).GetField("_parsedText", BindingFlags.Instance | BindingFlags.NonPublic);
+				FieldInfo parsedTextField = typeof(ChatMessageContainer).GetField("_parsedText", BindingFlags.Instance | BindingFlags.NonPublic);
 
-                var lastMessage = messages[0];
+				var lastMessage = messages[0];
 
-                List<TextSnippet[]> parsedText = parsedTextField.GetValue(lastMessage) as List<TextSnippet[]>;
+				List<TextSnippet[]> parsedText = parsedTextField.GetValue(lastMessage) as List<TextSnippet[]>;
 
-                if (parsedText.Count <= 0)
-                    return;
+				if (parsedText.Count <= 0)
+					return;
 
-                var snippet = parsedText[0];
+				var snippet = parsedText[0];
 
-                //OriginalText because vanilla recalculates parsedText on window resize based on OriginalText
-                var textOriginal = lastMessage.OriginalText;
+				//OriginalText because vanilla recalculates parsedText on window resize based on OriginalText
+				var textOriginal = lastMessage.OriginalText;
 
-                if (textOriginal.StartsWith(name))
-                    return;
+				if (textOriginal.StartsWith(name))
+					return;
 
-                var firstWord = snippet[0];
+				var firstWord = snippet[0];
 
-                if (firstWord.Text.StartsWith(name))
-                    return;
+				if (firstWord.Text.StartsWith(name))
+					return;
 
-                firstWord.Text = name + firstWord.Text;
-                lastMessage.OriginalText = name + lastMessage.OriginalText;
-            }
-        }
+				firstWord.Text = name + firstWord.Text;
+				lastMessage.OriginalText = name + lastMessage.OriginalText;
+			}
+		}
 
-        public static FieldInfo activelyModdingField;
+		public static FieldInfo activelyModdingField;
 
-        private static string GetCallingName(bool whitespace = false)
-        {
-            string name = string.Empty;
-            if (!Config.Instance.ChatSourceEnabled)
-                return string.Empty;
+		private static string GetCallingName(bool whitespace = false)
+		{
+			string name = string.Empty;
+			if (!Config.Instance.ChatSourceEnabled)
+				return string.Empty;
 
-            StackFrame[] frames/* = new StackFrame[1]*/;
-            try
-            {
-                frames = new StackTrace(true).GetFrames();
-                Logging.PrettifyStackTraceSources(frames);
-                int index = 2;
-                while (index < frames.Length && frames[index].GetMethod().Name is string methodName &&
-                    (methodName.Contains("NewText") || methodName.Contains("AddNewMessage"))) //We want the call to NewText, use AddNewMessage as fallback
-                    index++;
+			StackFrame[] frames/* = new StackFrame[1]*/;
+			try
+			{
+				frames = new StackTrace(true).GetFrames();
+				Logging.PrettifyStackTraceSources(frames);
+				//We want to find the call after the first found, last NewText or AddNewMessage
+				int index;
+				bool correctSequenceFound = false;
+				for (index = 0; index < frames.Length; index++)
+				{
+					var method = frames[index].GetMethod();
+					var methodName = method.Name;
+					if (methodName.Contains("NewText") || methodName.Contains("AddNewMessage"))
+					{
+						correctSequenceFound = true;
+					}
+					else if (correctSequenceFound)
+					{
+						break; //Done
+					}
+				}
 
-                if (index == frames.Length)
-                    name = string.Empty;
-                else
-                {
-                    var frame = frames[index];
-                    var method = frame.GetMethod();
+				if (index == frames.Length)
+				{
+					name = string.Empty;
+				}
+				else
+				{
+					var frame = frames[index];
+					var method = frame.GetMethod();
 
-                    Type declaringType = method.DeclaringType;
-                    if (declaringType != null)
-                    {
-                        name = declaringType.Namespace;
-                        name = name.Split('.')[0];
-                    }
-                    else
-                    {
-                        //Autogenerated methods (i.e. MonoMod detours) do not have a declaring type, default to Terraria
-                        name = "Terraria";
-                    }
+					Type declaringType = method.DeclaringType;
+					if (declaringType != null)
+					{
+						name = declaringType.Namespace;
+						name = name.Split('.')[0];
+					}
+					else
+					{
+						//Autogenerated methods (i.e. MonoMod detours) do not have a declaring type, default to Terraria
+						name = "Terraria";
+					}
 
-                    if (name != "Terraria")
-                    {
-                        if (Config.Instance.ShowDisplayName)
-                        {
-                            if (ModLoader.TryGetMod(name, out Mod mod))
-                            {
-                                name = mod.DisplayName;
-                            }
-                            else
-                            {
-                                if (ModLoader.TryGetMod(name + "Mod", out Mod mod2))
-                                {
-                                    name = mod2.DisplayName;
-                                }
-                            }
-                        }
-                    }
-                    else if(!Config.Instance.DisplayTerrariaSource)
-                    {
-                        name = string.Empty;
-                    }
-                }
-            }
-            catch
-            {
-                //var logger = ModContent.GetInstance<ChatSource>().Logger;
-                //logger.Info("#####");
-                //foreach (var frame in frames)
-                //{
-                //    logger.Info(frame?.ToString() ?? "frame null");
-                //}
-                //logger.Info("#####");
-            }
-            if (string.IsNullOrEmpty(name))
-                return string.Empty;
-            return $"[{name}]" + (whitespace ? " " : "");
-        }
-    }
+					if (name != "Terraria")
+					{
+						if (Config.Instance.ShowDisplayName)
+						{
+							if (ModLoader.TryGetMod(name, out Mod mod))
+							{
+								name = mod.DisplayName;
+							}
+							else
+							{
+								if (ModLoader.TryGetMod(name + "Mod", out Mod mod2))
+								{
+									name = mod2.DisplayName;
+								}
+							}
+						}
+					}
+					else if (!Config.Instance.DisplayTerrariaSource)
+					{
+						name = string.Empty;
+					}
+				}
+			}
+			catch
+			{
+				//var logger = ModContent.GetInstance<ChatSource>().Logger;
+				//logger.Info("#####");
+				//foreach (var frame in frames)
+				//{
+				//    logger.Info(frame?.ToString() ?? "frame null");
+				//}
+				//logger.Info("#####");
+			}
+			if (string.IsNullOrEmpty(name))
+				return string.Empty;
+			return $"[{name}]" + (whitespace ? " " : "");
+		}
+	}
 }
