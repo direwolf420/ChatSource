@@ -6,5 +6,4 @@ hideCode = false
 hideResources = false
 includeSource = false
 buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*, *.md, situation.png, fixed.png
-includePDB = true
 side = Client
