@@ -36,7 +36,7 @@ Shows the source of messages in the chat. Clientside, toggleable via config.
 * Toggle "Display Name" and "Internal Name" of a mod via config
 
 ## Localization
-If you wish to contribute translations, visit the [tML wiki page](https://github.com/tModLoader/tModLoader/wiki/Localization) on that.
+If you wish to contribute translations, visit the [tML wiki page](https://github.com/tModLoader/tModLoader/wiki/Contributing-Localization) on that.
 This mod uses `.hjson` files in the `Localization` folder.
 Translate things that are in english and commented out (either via `//` or `/* */`, remove the comment markers after translating)
 
