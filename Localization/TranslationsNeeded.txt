@@ -3,7 +3,7 @@ de-DE, 0/7, 0%, missing 7
 it-IT, 0/7, 0%, missing 7
 fr-FR, 0/7, 0%, missing 7
 es-ES, 0/7, 0%, missing 7
-ru-RU, 0/7, 0%, missing 7
+ru-RU, 7/7, 100%, missing 0
 zh-Hans, 0/7, 0%, missing 7
 pt-BR, 0/7, 0%, missing 7
 pl-PL, 0/7, 0%, missing 7
