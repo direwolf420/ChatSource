@@ -2,21 +2,21 @@ Mods: {
 	ChatSource: {
 		Configs: {
 			Config: {
-				// DisplayName: Config
+				DisplayName: Настройки
 
 				ChatSourceEnabled: {
-					// Label: Chat Source Enabled
-					// Tooltip: If this mods' main feature should work
+					Label: Отображать источник сообщений
+					Tooltip: Отображать имя модификации, которая отправляет сообщение
 				}
 
 				DisplayTerrariaSource: {
-					// Label: Show Vanilla As Source
-					// Tooltip: If messages from the vanilla game should be marked as such
+					Label: Отображать Ваниль как модификацию
+					Tooltip: Соответствующе помечать сообщения основной, немодифицированной игры
 				}
 
 				ShowDisplayName: {
-					// Label: Show 'Display Name'
-					// Tooltip: If mods should show with their 'Display Name' or 'Internal Name'
+					Label: Отображать 'Показное имя'
+					Tooltip: Отображать 'Показное имя' модификаций, или их 'Внутреннее имя'
 				}
 			}
 		}
