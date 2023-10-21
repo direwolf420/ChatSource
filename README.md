@@ -32,6 +32,7 @@ Shows the source of messages in the chat. Clientside, toggleable via config.
 
 **Notes:**
 * Some stuff like ore spawn announcements in multiplayer will show no mod associated because those messages are serversided
+* Death messages won't have an associated mod
 * "[Terraria]" prefix for vanilla messages is by default disabled
 * Toggle "Display Name" and "Internal Name" of a mod via config
 
