@@ -2,21 +2,21 @@ Mods: {
 	ChatSource: {
 		Configs: {
 			Config: {
-				// DisplayName: Configurazione
+				DisplayName: Configurazione
 
 				ChatSourceEnabled: {
-					// Label: Sorgente chat attivo
-					// Tooltip: Se attivo, le funzionalità principali di questa mod funzioneranno
+					Label: Sorgente chat attivo
+					Tooltip: Se attivo, le funzionalità principali di questa mod funzioneranno
 				}
 
 				DisplayTerrariaSource: {
-					// Label: Mostra la fonte vanilla
-					// Tooltip: Se i messaggi provenienti dal gioco vanilla dovrebbero essere evidenziati
+					Label: Mostra la fonte vanilla
+					Tooltip: Se i messaggi provenienti dal gioco vanilla dovrebbero essere evidenziati
 				}
 
 				ShowDisplayName: {
-					// Label: Mostra 'Nome visualizzato'
-					// Tooltip: Se le mod devono essere visualizzate con il loro "Nome visualizzato" o "Nome interno".
+					Label: Mostra 'Nome visualizzato'
+					Tooltip: Se le mod devono essere visualizzate con il loro "Nome visualizzato" o "Nome interno".
 				}
 			}
 		}
