@@ -23,3 +23,4 @@ List of localization contributors:
 * Russian: [b]GodHybrid[/b]
 * Italian: [b]Sea Noodle[/b]
 * Simplified Chinese: [b]Cyrilly[/b]
+* French: [b]TheBrutalSkull[/b]
