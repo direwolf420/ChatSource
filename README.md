@@ -42,7 +42,7 @@ This mod uses `.hjson` files in the `Localization` folder.
 Translate things that are in english and commented out (either via `//` or `/* */`, remove the comment markers after translating)
 
 List of localization contributors:
-* Russian: **GodHybrid**
+* Russian: **GodHybrid, Alino4kaHvoshch**
 * Italian: **Sea Noodle**
 * Simplified Chinese: **Cyrilly**
 * French: **TheBrutalSkull**

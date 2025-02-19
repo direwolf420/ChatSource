@@ -20,7 +20,7 @@ Notes:
 
 Localization: If you want to add support for different languages, you are welcome to contribute localizations here: https://github.com/direwolf420/ChatSource
 List of localization contributors:
-* Russian: GodHybrid
+* Russian: GodHybrid, Alino4kaHvoshch
 * Italian: Sea Noodle
 * Simplified Chinese: Cyrilly
 * French: TheBrutalSkull

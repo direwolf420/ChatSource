@@ -20,7 +20,7 @@ Shows the source of messages in the chat. Clientside, toggleable via config
 [b]Localization:[/b]
 If you want to add support for different languages, you are welcome to contribute localizations here: [b][url=https://github.com/direwolf420/ChatSource]GitHub[/url][/b]
 List of localization contributors:
-* Russian: [b]GodHybrid[/b]
+* Russian: [b]GodHybrid, Alino4kaHvoshch[/b]
 * Italian: [b]Sea Noodle[/b]
 * Simplified Chinese: [b]Cyrilly[/b]
 * French: [b]TheBrutalSkull[/b]
