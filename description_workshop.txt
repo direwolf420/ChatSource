@@ -24,4 +24,5 @@ List of localization contributors:
 * Italian: [b]Sea Noodle[/b]
 * Simplified Chinese: [b]Cyrilly[/b]
 * French: [b]TheBrutalSkull[/b]
+* Spanish: [b]Elocura[/b]
 * German: [b]Lighty[/b]
