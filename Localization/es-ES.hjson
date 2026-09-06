@@ -15,14 +15,8 @@ Mods: {
 				}
 
 				ShowDisplayName: {
-					Label: Mostrar el [c/f4d58d:nombre del mod]
-					Tooltip:
-						'''
-						Si los mods deben mostrar el [c/f4d58d:nombre del mod] como fuente o su [c/f4d58d:nombre interno]
-						[c/f4d58d:Ejemplo]
-						[c/f4d58d:Nombre del mod:] Ore Excavator (1.4.3/1.4.4 Veinminer)
-						[c/f4d58d:Nombre interno:] OreExcavator
-						'''
+					Label: Mostrar el 'nombre del mod'
+					Tooltip: Si los mods deben mostrar el 'nombre del mod' como fuente o su 'nombre interno'
 				}
 			}
 		}
