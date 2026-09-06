@@ -2,21 +2,27 @@ Mods: {
 	ChatSource: {
 		Configs: {
 			Config: {
-				// DisplayName: Config
+				DisplayName: Configuración
 
 				ChatSourceEnabled: {
-					// Label: Chat Source Enabled
-					// Tooltip: If this mods' main feature should work
+					Label: Fuente de chat habilitada
+					Tooltip: Si la característica principal de este mod debería funcionar
 				}
 
 				DisplayTerrariaSource: {
-					// Label: Show Vanilla As Source
-					// Tooltip: If messages from the vanilla game should be marked as such
+					Label: Mostrar vanilla como fuente
+					Tooltip: Si los mensajes del juego original deben marcarse como tales
 				}
 
 				ShowDisplayName: {
-					// Label: Show 'Display Name'
-					// Tooltip: If mods should show with their 'Display Name' or 'Internal Name'
+					Label: Mostrar el [c/f4d58d:nombre del mod]
+					Tooltip:
+						'''
+						Si los mods deben mostrar el [c/f4d58d:nombre del mod] como fuente o su [c/f4d58d:nombre interno]
+						[c/f4d58d:Ejemplo]
+						[c/f4d58d:Nombre del mod:] Ore Excavator (1.4.3/1.4.4 Veinminer)
+						[c/f4d58d:Nombre interno:] OreExcavator
+						'''
 				}
 			}
 		}
